@@ -1,0 +1,103 @@
+import {useState, useContext} from 'react'
+import CartContext from '../../context/CartContext'
+import './index.css'
+
+const Payment = ({close}) => {
+  const {cartList} = useContext(CartContext)
+  const [paymentMethod, setPaymentMethod] = useState('COD')
+  const [orderPlaced, setOrderPlaced] = useState(false)
+
+  const total = cartList.reduce(
+    (acc, item) => acc + item.price * item.quantity,
+    0,
+  )
+
+  const handleConfirm = () => {
+    setOrderPlaced(true)
+  }
+
+  return (
+    <div className="payment-popup-container">
+      {!orderPlaced ? (
+        <>
+          <h2 className="popup-title">Select Payment Method</h2>
+
+          <div className="payment-options">
+            <label>
+              <input
+                type="radio"
+                name="payment"
+                value="Card"
+                checked={paymentMethod === 'Card'}
+                onChange={() => setPaymentMethod('Card')}
+              />
+              Card
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="payment"
+                value="Net Banking"
+                checked={paymentMethod === 'Net Banking'}
+                onChange={() => setPaymentMethod('Net Banking')}
+              />
+              Net Banking
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="payment"
+                value="UPI"
+                checked={paymentMethod === 'UPI'}
+                onChange={() => setPaymentMethod('UPI')}
+              />
+              UPI
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="payment"
+                value="Wallet"
+                checked={paymentMethod === 'Wallet'}
+                onChange={() => setPaymentMethod('Wallet')}
+              />
+              Wallet
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="payment"
+                value="COD"
+                checked={paymentMethod === 'COD'}
+                onChange={() => setPaymentMethod('COD')}
+              />
+              Cash on Delivery
+            </label>
+          </div>
+
+          <div className="summary">
+            <p>Items: {cartList.length}</p>
+            <p>Total Price: ₹{total}</p>
+          </div>
+
+          <button type="button" className="confirm-btn" onClick={handleConfirm}>
+            Confirm Order
+          </button>
+          <button type="button" className="close-btn" onClick={close}>
+            Cancel
+          </button>
+        </>
+      ) : (
+        <div className="success-message">
+          <h3>Your order has been placed successfully</h3>
+          <p>Payment Method: {paymentMethod}</p>
+          <button type="button" className="close-btn" onClick={close}>
+            Close
+          </button>
+        </div>
+      )}
+    </div>
+  )
+}
+
+export default Payment
