@@ -4,7 +4,7 @@ import './index.css'
 
 const Payment = ({close}) => {
   const {cartList} = useContext(CartContext)
-  const [paymentMethod, setPaymentMethod] = useState('COD')
+  const [paymentMethod, setPaymentMethod] = useState('') // nothing selected initially
   const [orderPlaced, setOrderPlaced] = useState(false)
 
   const total = cartList.reduce(
@@ -13,7 +13,9 @@ const Payment = ({close}) => {
   )
 
   const handleConfirm = () => {
-    setOrderPlaced(true)
+    if (paymentMethod === 'COD') {
+      setOrderPlaced(true)
+    }
   }
 
   return (
@@ -24,43 +26,19 @@ const Payment = ({close}) => {
 
           <div className="payment-options">
             <label>
-              <input
-                type="radio"
-                name="payment"
-                value="Card"
-                checked={paymentMethod === 'Card'}
-                onChange={() => setPaymentMethod('Card')}
-              />
+              <input type="radio" name="payment" value="Card" disabled />
               Card
             </label>
             <label>
-              <input
-                type="radio"
-                name="payment"
-                value="Net Banking"
-                checked={paymentMethod === 'Net Banking'}
-                onChange={() => setPaymentMethod('Net Banking')}
-              />
+              <input type="radio" name="payment" value="Net Banking" disabled />
               Net Banking
             </label>
             <label>
-              <input
-                type="radio"
-                name="payment"
-                value="UPI"
-                checked={paymentMethod === 'UPI'}
-                onChange={() => setPaymentMethod('UPI')}
-              />
+              <input type="radio" name="payment" value="UPI" disabled />
               UPI
             </label>
             <label>
-              <input
-                type="radio"
-                name="payment"
-                value="Wallet"
-                checked={paymentMethod === 'Wallet'}
-                onChange={() => setPaymentMethod('Wallet')}
-              />
+              <input type="radio" name="payment" value="Wallet" disabled />
               Wallet
             </label>
             <label>
@@ -80,7 +58,12 @@ const Payment = ({close}) => {
             <p>Total Price: ₹{total}</p>
           </div>
 
-          <button type="button" className="confirm-btn" onClick={handleConfirm}>
+          <button
+            type="button"
+            className="confirm-btn"
+            onClick={handleConfirm}
+            disabled={paymentMethod !== 'COD'}
+          >
             Confirm Order
           </button>
           <button type="button" className="close-btn" onClick={close}>
